@@ -13,11 +13,11 @@ Open the file "index.html" with your browser of choice. That's it!
 ##Browsers:
 To use ZeroTheory, I recommend that you use one of the following browsers.
 
-IE 10.0 +
-Firefox 15.0 +
-Chrome 22.0 +
-Safari 5.1 +
-Opera 12.1 +
+1. IE 10.0 +
+2. Firefox 15.0 +
+3. Chrome 22.0 +
+4. Safari 5.1 +
+5. Opera 12.1 +
 
 ##Future
 1. Test cases!
