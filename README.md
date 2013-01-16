@@ -33,10 +33,13 @@ Opera 12.1 +
 ##Q and A:
 
 **Q:** Why is there only 3 options for speccs?
+
 **A:** Those are the 3 versions I considered while coding. If you have a viable specc for me to add which is not based on bugs (Read: Searing Pain based speccs), then I might add it.
 
 **Q:** Why is the difference between the speccs so low/high?
-A:** Thats just the way it is. There might be something wrong with the code, but there most likely isn't. Also note that SM/Ruin does not take into account Amplify Curse nor Improved Curse of Agony.
+
+**A:** Thats just the way it is. There might be something wrong with the code, but there most likely isn't. Also note that SM/Ruin does not take into account Amplify Curse nor Improved Curse of Agony.
 
 **Q:** Why does the results vary so much sometimes?
+
 **A:** Because the program, like Mangos Zero, uses random rolls to determine the outcome of certain things. It is after all, a simulation, and not just a calculation based on average values like Elitistjerks for example.
