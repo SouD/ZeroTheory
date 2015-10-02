@@ -7,15 +7,15 @@
 
 //Define namespace
 var ZeroTheory = {
-	MAX_EFFECT_INDEX: 3,
-	MAX_AURAS: 48,
-	MAX_POSITIVE_AURAS: 32,
-	DBC_PATH: 'dbcs/',
-	GCD: 1500,
-	DEFAULT_RUNTIME: (15 * 60 * 1000),
-	SM_RUIN: 1,
-	DS_RUIN_CORR: 2,
-	DS_RUIN_SUPP: 3
+    MAX_EFFECT_INDEX: 3,
+    MAX_AURAS: 48,
+    MAX_POSITIVE_AURAS: 32,
+    DBC_PATH: 'dbcs/',
+    GCD: 1500,
+    DEFAULT_RUNTIME: (15 * 60 * 1000),
+    SM_RUIN: 1,
+    DS_RUIN_CORR: 2,
+    DS_RUIN_SUPP: 3
 };
 
 ZeroTheory.activeSpecc = ZeroTheory.SM_RUIN; //Hackfix for suppression to work nicely
@@ -43,40 +43,40 @@ var SpellFamily = {
 };
 
 var SpellSchools = {
-	SPELL_SCHOOL_NORMAL: 	0,
-	SPELL_SCHOOL_HOLY: 		1,
-	SPELL_SCHOOL_FIRE: 		2,
-	SPELL_SCHOOL_NATURE: 	3,
-	SPELL_SCHOOL_FROST: 	4,
-	SPELL_SCHOOL_SHADOW: 	5,
-	SPELL_SCHOOL_ARCANE: 	6
+    SPELL_SCHOOL_NORMAL:    0,
+    SPELL_SCHOOL_HOLY:      1,
+    SPELL_SCHOOL_FIRE:      2,
+    SPELL_SCHOOL_NATURE:    3,
+    SPELL_SCHOOL_FROST:     4,
+    SPELL_SCHOOL_SHADOW:    5,
+    SPELL_SCHOOL_ARCANE:    6
 };
 
 var SpellSchoolMask = {
-	SPELL_SCHOOL_MASK_NONE: 	0x00,
-	SPELL_SCHOOL_MASK_NORMAL: 	(1 << SpellSchools.SPELL_SCHOOL_NORMAL),
-	SPELL_SCHOOL_MASK_HOLY: 	(1 << SpellSchools.SPELL_SCHOOL_HOLY),
-	SPELL_SCHOOL_MASK_FIRE: 	(1 << SpellSchools.SPELL_SCHOOL_FIRE),
-	SPELL_SCHOOL_MASK_NATURE: 	(1 << SpellSchools.SPELL_SCHOOL_NATURE),
-	SPELL_SCHOOL_MASK_FROST: 	(1 << SpellSchools.SPELL_SCHOOL_FROST),
-	SPELL_SCHOOL_MASK_SHADOW: 	(1 << SpellSchools.SPELL_SCHOOL_SHADOW),
-	SPELL_SCHOOL_MASK_ARCANE: 	(1 << SpellSchools.SPELL_SCHOOL_ARCANE),
-	
-	SPELL_SCHOOL_MASK_SPELL: 	((1 << 2) | 
-								 (1 << 3) | (1 << 4) |
-								 (1 << 5) | (1 << 6)),
-	
-	SPELL_SCHOOL_MASK_MAGIC: 	((1 << 1) | ((1 << 2) | 
-								 (1 << 3) | (1 << 4) |
-								 (1 << 5) | (1 << 6))),
-	
-	SPELL_SCHOOL_MASK_ALL: 		((1 << 0) | ((1 << 1) | ((1 << 2) | 
-								 (1 << 3) | (1 << 4) |
-								 (1 << 5) | (1 << 6)))),
-	
-	getSchoolMask: function(school) {
-		return (1 << school);
-	}
+    SPELL_SCHOOL_MASK_NONE:     0x00,
+    SPELL_SCHOOL_MASK_NORMAL:   (1 << SpellSchools.SPELL_SCHOOL_NORMAL),
+    SPELL_SCHOOL_MASK_HOLY:     (1 << SpellSchools.SPELL_SCHOOL_HOLY),
+    SPELL_SCHOOL_MASK_FIRE:     (1 << SpellSchools.SPELL_SCHOOL_FIRE),
+    SPELL_SCHOOL_MASK_NATURE:   (1 << SpellSchools.SPELL_SCHOOL_NATURE),
+    SPELL_SCHOOL_MASK_FROST:    (1 << SpellSchools.SPELL_SCHOOL_FROST),
+    SPELL_SCHOOL_MASK_SHADOW:   (1 << SpellSchools.SPELL_SCHOOL_SHADOW),
+    SPELL_SCHOOL_MASK_ARCANE:   (1 << SpellSchools.SPELL_SCHOOL_ARCANE),
+
+    SPELL_SCHOOL_MASK_SPELL:    ((1 << 2) |
+                                 (1 << 3) | (1 << 4) |
+                                 (1 << 5) | (1 << 6)),
+
+    SPELL_SCHOOL_MASK_MAGIC:    ((1 << 1) | ((1 << 2) |
+                                 (1 << 3) | (1 << 4) |
+                                 (1 << 5) | (1 << 6))),
+
+    SPELL_SCHOOL_MASK_ALL:      ((1 << 0) | ((1 << 1) | ((1 << 2) |
+                                 (1 << 3) | (1 << 4) |
+                                 (1 << 5) | (1 << 6)))),
+
+    getSchoolMask: function(school) {
+        return (1 << school);
+    }
 };
 
 //Only using 2 of all effects...
@@ -230,7 +230,7 @@ var SpellMissInfo = {
 };
 
 var SpellHitType = {
-	SPELL_HIT_TYPE_UNK1: 0x00001,
+    SPELL_HIT_TYPE_UNK1: 0x00001,
     SPELL_HIT_TYPE_CRIT: 0x00002,
     SPELL_HIT_TYPE_UNK3: 0x00004,
     SPELL_HIT_TYPE_UNK4: 0x00008,
