@@ -5,22 +5,17 @@
  * Constants and values used by application.
  */
 
-//Define namespace
-var ZeroTheory = {
-    MAX_EFFECT_INDEX: 3,
-    MAX_AURAS: 48,
-    MAX_POSITIVE_AURAS: 32,
-    DBC_PATH: 'dbcs/',
-    GCD: 1500,
-    DEFAULT_RUNTIME: (15 * 60 * 1000),
-    SM_RUIN: 1,
-    DS_RUIN_CORR: 2,
-    DS_RUIN_SUPP: 3
-};
+var MAX_EFFECT_INDEX = 3,
+    MAX_AURAS = 48,
+    MAX_POSITIVE_AURAS = 32,
+    DBC_PATH = './dbcs/',
+    GCD = 1500,
+    DEFAULT_RUNTIME = (15 * 60 * 1000),
+    SM_RUIN = 1,
+    DS_RUIN_CORR = 2,
+    DS_RUIN_SUPP = 3;
 
-ZeroTheory.activeSpecc = ZeroTheory.SM_RUIN; //Hackfix for suppression to work nicely
-
-//Possibly useless
+// Possibly useless
 var SpellFamily = {
     SPELLFAMILY_GENERIC:      0,
     SPELLFAMILY_UNK1:         1, // events, holidays
@@ -79,7 +74,7 @@ var SpellSchoolMask = {
     }
 };
 
-//Only using 2 of all effects...
+// Only using 2 of all effects...
 var SpellEffects = {
     SPELL_EFFECT_NONE:                       0,
     SPELL_EFFECT_INSTAKILL:                  1,
@@ -254,7 +249,7 @@ var DamageEffectType = {
     SELF_DAMAGE:              5
 };
 
-//Using very few of these...
+// Using very few of these...
 var AuraType = {
     SPELL_AURA_NONE: 0,
     SPELL_AURA_BIND_SIGHT: 1,
@@ -450,4 +445,3 @@ var AuraType = {
     SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED: 191,
     TOTAL_AURAS: 192
 };
-
