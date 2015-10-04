@@ -112,3 +112,7 @@ Temporary Items
 
 # sftp configuration file
 sftp-config.json
+
+public/css/
+public/js/
+public/fonts/

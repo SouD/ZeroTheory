@@ -1,0 +1,23 @@
+// ====================================
+// Bootstrap customization
+// ====================================
+
+// Set variables that modify bootstrap look n feel here
+// List of available variables can be found here:
+//   http://getbootstrap.com/customize/#less-variables
+// Just remove the @ and replace it with $
+
+$body-bg: $backgroundColor;
+$border-radius-base: 0;
+$border-radius-large: 0;
+$border-radius-small: 0;
+$brand-primary: $primaryColor;
+$text-color: $paragraphColor;
+$link-color: $primaryColor;
+
+// Modal customization
+$modal-content-bg: $secondaryBackgroundColor;
+$modal-content-border-color: $backgroundHighlightColor;
+$modal-content-fallback-border-color: $backgroundHighlightColor;
+$modal-header-border-color: $primaryColor;
+$modal-footer-border-color: $primaryColor;
