@@ -9,7 +9,7 @@
  *
  * @constructor ZeroTheory
  */
-ZeroTheory = function() {
+var ZeroTheory = function() {
     this.caster = new Unit(60); // Level 60 generic unit
     this.target = new Unit(63); // Level 63 generic unit
 
@@ -34,6 +34,8 @@ ZeroTheory = function() {
     };
 };
 
+ZeroTheory.activeSpecc = SM_RUIN;
+
 /**
  * Prepares the caster by applying talent auras.
  */
@@ -47,6 +49,7 @@ ZeroTheory.prototype.prepareTalents = function() {
             if (this.caster.hasSpell(ds.spellInfo)) {
                 this.caster.removeAurasBySpell(ds.spellInfo);
             }
+
             if (!this.caster.hasSpell(sm.spellInfo)) {
                 this.caster.castSpellOnSelf(sm);
             }

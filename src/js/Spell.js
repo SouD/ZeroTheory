@@ -15,14 +15,14 @@
  * @param {boolean} triggered Is triggered spell
  * @param {object} triggeredBy Triggering spell entry information
  */
-ZeroTheory.Spell = function(spellEntry, triggered, triggeredBy) {
+var Spell = function (spellEntry, triggered, triggeredBy) {
     this.spellInfo = spellEntry;
     this.triggeredBySpellInfo = triggeredBy ? triggeredBy : null;
     this.schoolMask = SpellSchoolMask.getSchoolMask(spellEntry.school);
 
     this.currentBasePoints = [];
-    for (var i = 0; i < ZeroTheory.MAX_EFFECT_INDEX; i++) {
-        this.currentBasePoints[i] = ZeroTheory.Spell.calculateSimpleValue(spellEntry, i + 1);
+    for (var i = 0; i < MAX_EFFECT_INDEX; i++) {
+        this.currentBasePoints[i] = Spell.calculateSimpleValue(spellEntry, i + 1);
     }
 
     this.triggeredSpell = triggered ? triggered : false;
@@ -37,7 +37,7 @@ ZeroTheory.Spell = function(spellEntry, triggered, triggeredBy) {
         procs: 0
     };
     this.ready = false;
-}
+};
 
 /**
  * Calculates a simple value for a spell's effect.
@@ -45,9 +45,9 @@ ZeroTheory.Spell = function(spellEntry, triggered, triggeredBy) {
  * @param {object} spellEntry Spell entry information
  * @param {number} effIndex Index of effect to calculate value for
  */
-ZeroTheory.Spell.calculateSimpleValue = function(spellEntry, effIndex) {
+Spell.calculateSimpleValue = function (spellEntry, effIndex) {
     return spellEntry['effectBasePoints' + effIndex] + spellEntry['effectBaseDice' + effIndex];
-}
+};
 
 /**
  * Calculates the default coefficient for the given spell.
@@ -57,66 +57,81 @@ ZeroTheory.Spell.calculateSimpleValue = function(spellEntry, effIndex) {
  * @param {DamageEffectType} dmgType Damage type
  * @return {number} The calculated coefficient
  */
-ZeroTheory.Spell.calculateDefaultCoefficient = function(spellEntry, dmgType) {
+Spell.calculateDefaultCoefficient = function (spellEntry, dmgType) {
     var dotFactor = 1;
     var coeff = 0;
-    //Lazy implementation of coefficients, cba to do MangosZero b/c effectAmplitude1-3
+    var ct = 0;
+
+    // Lazy implementation of coefficients, cba to do MangosZero b/c effectAmplitude1-3
     switch (spellEntry.spellIconID) {
-        case 31: //Immolate
+        case 31: // Immolate
             var dur = spellStore.getDuration(spellEntry).duration;
-            var ct = spellStore.getCastingTime(spellEntry).base;
+            ct = spellStore.getCastingTime(spellEntry).base;
             var dotPortion = (dur / 15000) / ((dur / 15000) + (ct / 3500));
             var directPortion = 1 - dotPortion;
+
             if (dmgType == DamageEffectType.DOT) {
-                dotFactor /= 5; //5 ticks
-                ZeroTheory.Utils.console('log', 'Immolate dot dmg coeff: %d', ((dur / 15000) * dotPortion) * dotFactor);
+                dotFactor /= 5; // 5 ticks
+                console.debug('Immolate dot dmg coeff: %d', ((dur / 15000) * dotPortion) * dotFactor);
                 //       15  /  15        ~0.63          0.2    = 1*0.63*(1/5) =~ 0.127
+
                 return ((dur / 15000) * dotPortion) * dotFactor;
             }
             else {
                 coeff = (ct / 3500) * directPortion;
-                ZeroTheory.Utils.console('log', 'Immolate school dmg coeff: %d', coeff);
+
+                console.debug('Immolate school dmg coeff: %d', coeff);
+
                 return coeff;
             }
+            break;
 
-        case 91: //Curse of Doom
-            ZeroTheory.Utils.console('log', 'CoD coeff: %d', 2.0);
+        case 91: // Curse of Doom
+            console.debug('CoD coeff: %d', 2.0);
             return 2.0; //Easy peasy
 
-        case 152: //Siphon Life
+        case 152: // Siphon Life
             coeff = spellStore.getDuration(spellEntry).duration / 15000.0;
             dotFactor /= 10;
             coeff *= dotFactor;
-            ZeroTheory.Utils.console('log', 'SL coeff: %d', ((coeff * dotFactor)/2));
-            return coeff / 2; //Halve coeff for drain spells (Works out to 1 as it should)
+
+            console.debug('SL coeff: %d', ((coeff * dotFactor)/2));
+
+            return coeff / 2; // Halve coeff for drain spells (Works out to 1 as it should)
 
         case 313: //Corruption
             coeff = spellStore.getDuration(spellEntry).duration / 15000.0;
             dotFactor /= 6;
-            ZeroTheory.Utils.console('log', 'Corr coeff: %d', (coeff * dotFactor));
+
+            console.debug('Corr coeff: %d', (coeff * dotFactor));
+
             return coeff * dotFactor;
 
         case 544: //Curse of Agony
-            ZeroTheory.Utils.console('log', 'CoA coeff: %d', 0.12);
+            console('CoA coeff: %d', 0.12);
+
             return 0.12;
 
         default:
-            var ct = spellStore.getCastingTime(spellEntry).base;
-            ZeroTheory.Utils.console('log', 'Calculating default coeff with ctime: %i', ct);
+            ct = spellStore.getCastingTime(spellEntry).base;
+
+            console.debug('Calculating default coeff with ctime: %i', ct);
+
             ct = ct < 1500 ? 1500 : ct;
             ct /= 1000;
             coeff = ct / 3.5;
-            return coeff < 2.0 ? coeff : 2.0; //200% max coeff
+
+            return coeff < 2.0 ? coeff : 2.0; // 200% max coeff
     }
-}
+};
 
 /**
  * Sets the ready state of the spell to false, resetting
  * the results holder.
  */
-ZeroTheory.Spell.prototype.reset = function() {
+Spell.prototype.reset = function () {
     this.ready = false;
-}
+};
 
 /**
  * Prepares the spell for casting by looking up duration
@@ -124,12 +139,12 @@ ZeroTheory.Spell.prototype.reset = function() {
  *
  * @param {Unit} caster The spells caster
  */
-ZeroTheory.Spell.prototype.prepare = function(caster) {
+Spell.prototype.prepare = function (caster) {
     this.caster = caster;
     this.castTimeInfo = spellStore.lookupCastingTime(this.spellInfo.castingTimeIndex);
     this.durationInfo = spellStore.lookupDuration(this.spellInfo.durationIndex);
     this.ready = true;
-}
+};
 
 /**
  * Cast {@code this} spell.
@@ -137,7 +152,7 @@ ZeroTheory.Spell.prototype.prepare = function(caster) {
  * @param {Unit} caster Caster of the spell
  * @param {Unit} victim Victim of the spell
  */
-ZeroTheory.Spell.prototype.cast = function(caster, victim) {
+Spell.prototype.cast = function (caster, victim) {
     if (!this.ready) {
         this.prepare(caster);
     }
@@ -149,13 +164,16 @@ ZeroTheory.Spell.prototype.cast = function(caster, victim) {
     this.results.healing = 0;
 
     this.results.hitResult = this.caster.spellHitResult(victim, this.spellInfo);
-    ZeroTheory.Utils.console('log', 'Hit result: %s', (this.results.hitResult == SpellMissInfo.SPELL_MISS_NONE) ? 'SPELL_MISS_NONE' : 'SPELL_MISS_RESIST');
+
+    var res = (this.results.hitResult == SpellMissInfo.SPELL_MISS_NONE) ? 'SPELL_MISS_NONE' : 'SPELL_MISS_RESIST';
+    console.debug('Hit result: %s', res);
+
     switch (this.results.hitResult) {
         case SpellMissInfo.SPELL_MISS_NONE:
             this.doAllEffectOnTarget(victim);
             break;
     }
-}
+};
 
 /**
  * Process all spell effects on the supplied target.
@@ -165,18 +183,19 @@ ZeroTheory.Spell.prototype.cast = function(caster, victim) {
  *
  * @param {Unit} victim Unit to process effects on
  */
-ZeroTheory.Spell.prototype.doAllEffectOnTarget = function(victim) {
+Spell.prototype.doAllEffectOnTarget = function (victim) {
     if (!this.ready) {
         this.prepare(victim);
     }
 
-    ZeroTheory.Utils.console('log', 'Processing effects for target: %o', victim);
-    for (var i = 1; i <= ZeroTheory.MAX_EFFECT_INDEX; i++) {
+    console.debug('Processing effects for target: %o', victim);
+
+    for (var i = 1; i <= MAX_EFFECT_INDEX; i++) {
         if (this.spellInfo['effect' + i] == 0) {
             continue;
         }
 
-        ZeroTheory.Utils.console('log', 'Processing effect no: %i', i);
+        console.debug('Processing effect no: %i', i);
 
         switch (this.spellInfo['effect' + i]) {
             case SpellEffects.SPELL_EFFECT_SCHOOL_DAMAGE:
@@ -188,7 +207,7 @@ ZeroTheory.Spell.prototype.doAllEffectOnTarget = function(victim) {
                 break;
         }
     }
-}
+};
 
 /**
  * Calulates spell base damage.
@@ -196,9 +215,10 @@ ZeroTheory.Spell.prototype.doAllEffectOnTarget = function(victim) {
  * @param {number} effectIndex Index of spell effect
  * @param {Unit} victim Victim of effect
  */
-ZeroTheory.Spell.prototype.calculateDamage = function(effectIndex, victim) {
-    return this.caster.calculateBaseDamage(victim, this.spellInfo, effectIndex, this.currentBasePoints[effectIndex - 1]);
-}
+Spell.prototype.calculateDamage = function (effectIndex, victim) {
+    return this.caster.calculateBaseDamage(victim, this.spellInfo, effectIndex,
+        this.currentBasePoints[effectIndex - 1]);
+};
 
 /**
  * Calculates spell damage done and resists.
@@ -206,11 +226,15 @@ ZeroTheory.Spell.prototype.calculateDamage = function(effectIndex, victim) {
  * @param {number} effectIndex Index of effect
  * @param {Unit} victim Victim of effect
  */
-ZeroTheory.Spell.prototype.calculateSpellDamage = function(effectIndex, victim) {
-    var tmpDamage = this.caster.calculateSpellDamage(victim, this.spellInfo, this.results.directDamage, this.results);
-    tmpDamage = victim.calculateResist(this.caster, this.spellInfo.school, tmpDamage, DamageEffectType.SPELL_DIRECT_DAMAGE, this.results);
+Spell.prototype.calculateSpellDamage = function (effectIndex, victim) {
+    var tmpDamage = this.caster.calculateSpellDamage(victim, this.spellInfo,
+        this.results.directDamage, this.results);
+
+    tmpDamage = victim.calculateResist(this.caster, this.spellInfo.school,
+        tmpDamage, DamageEffectType.SPELL_DIRECT_DAMAGE, this.results);
+
     return tmpDamage > 0 ? tmpDamage : 0;
-}
+};
 
 /**
  * Handler method for effect:
@@ -219,11 +243,12 @@ ZeroTheory.Spell.prototype.calculateSpellDamage = function(effectIndex, victim) 
  * @param {number} effectIndex Index of effect
  * @param {Unit} victim Victim of effect
  */
-ZeroTheory.Spell.prototype._handleEffectSchoolDamage = function(effectIndex, victim) {
+Spell.prototype._handleEffectSchoolDamage = function (effectIndex, victim) {
     this.results.directDamage = this.calculateDamage(effectIndex, victim);
     this.results.directDamage = this.calculateSpellDamage(effectIndex, victim);
-    ZeroTheory.Utils.console('log', 'Final school damage: %i', this.results.directDamage);
-}
+
+    console.debug('Final school damage: %i', this.results.directDamage);
+};
 
 /**
  * Handler method for effect:
@@ -232,7 +257,6 @@ ZeroTheory.Spell.prototype._handleEffectSchoolDamage = function(effectIndex, vic
  * @param {number} effectIndex Index of effect
  * @param {Unit} victim Victim of effect
  */
-ZeroTheory.Spell.prototype._handleEffectApplyAura = function(effectIndex, victim) {
-    victim.spellAuraList.push(new ZeroTheory.Aura(this.caster, victim, this, effectIndex));
-}
-
+Spell.prototype._handleEffectApplyAura = function (effectIndex, victim) {
+    victim.spellAuraList.push(new Aura(this.caster, victim, this, effectIndex));
+};

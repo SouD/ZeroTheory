@@ -8,7 +8,7 @@
 var MAX_EFFECT_INDEX = 3,
     MAX_AURAS = 48,
     MAX_POSITIVE_AURAS = 32,
-    DBC_PATH = './dbcs/',
+    DBC_PATH = 'dbcs/',
     GCD = 1500,
     DEFAULT_RUNTIME = (15 * 60 * 1000),
     SM_RUIN = 1,

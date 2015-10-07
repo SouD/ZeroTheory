@@ -78,15 +78,15 @@ config.js = {
     config.bower.path + '/jquery/dist/jquery.min.js',
     config.bower.path + '/bootstrap-sass/assets/javascripts/bootstrap.min.js'
   ],
-  file: 'scripts.min.js'
+  file: 'scripts.min.js',
+  lib: 'libs.min.js'
 };
 
 gulp.task('scripts', function () {
   return gulp.src(config.js.files)
     .pipe(sourcemaps.init())
-      .pipe(uglify())
-      .pipe(gulp.src(config.js.libs))
       .pipe(concat(config.js.file))
+      .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.public.js));
 });
@@ -95,5 +95,16 @@ gulp.task('scripts:watch', function () {
   gulp.watch(config.js.files, ['scripts']);
 });
 
+gulp.task('scripts:libs', function () {
+  return gulp.src(config.js.libs)
+    .pipe(concat(config.js.lib))
+    .pipe(gulp.dest(config.public.js));
+});
+
+gulp.task('scripts:dbcs', function () {
+  return gulp.src('./src/dbcs/**/*.json')
+    .pipe(gulp.dest('./public/dbcs'));
+});
+
 // Default task
-gulp.task('default', ['bower', 'fonts', 'scripts', 'sass']);
+gulp.task('default', ['bower', 'fonts', 'scripts', 'scripts:libs', 'scripts:dbcs', 'sass']);

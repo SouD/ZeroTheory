@@ -16,7 +16,7 @@
  * @param {Spell} spell Spell owner
  * @param {number} effectIndex Index of effect causing aura
  */
-Aura = function(caster, affects, spell, effectIndex) {
+var Aura = function(caster, affects, spell, effectIndex) {
     this.caster = caster;
     this.affects = affects;
     this.owner = spell;
@@ -74,8 +74,10 @@ Aura = function(caster, affects, spell, effectIndex) {
             }
 
             this.maxTicks = this.duration / this.periodicTime;
-            this.value = this.caster.calculateBaseDamage(this.affects, spellEntry, effectIndex, this.value);
-            this.value = this.caster.spellDamageBonusDone(this.affects, spellEntry, this.value, DamageEffectType.DOT);
+            this.value = this.caster.calculateBaseDamage(this.affects,
+                spellEntry, effectIndex, this.value);
+            this.value = this.caster.spellDamageBonusDone(this.affects,
+                spellEntry, this.value, DamageEffectType.DOT);
             this.tickTimer = this.periodicTime;
 
             break;
@@ -143,7 +145,8 @@ Aura.prototype.periodicTick = function() {
             var spellEntry = this.owner.spellInfo;
             var damage = this.value;
 
-            damage = this.affects.spellDamageBonusTaken(this.caster, spellEntry, damage, DamageEffectType.DOT);
+            damage = this.affects.spellDamageBonusTaken(this.caster, spellEntry,
+                damage, DamageEffectType.DOT);
 
             if (spellEntry.spellClassSet == SpellFamily.SPELLFAMILY_WARLOCK && spellEntry.spellIconID == 544) { // CoA tick damage modifying
                 if (this.numTicks <= 4) {
@@ -153,7 +156,8 @@ Aura.prototype.periodicTick = function() {
                 }
             }
 
-            damage = this.affects.calculateResist(this.caster, spellEntry.school, damage, DamageEffectType.DOT, this.owner.results);
+            damage = this.affects.calculateResist(this.caster, spellEntry.school,
+                damage, DamageEffectType.DOT, this.owner.results);
 
             // Apply affliction talent Nightfall
             if (damage > 0 && spellEntry.spellIconID == 313 && ZeroTheory.activeSpecc == SM_RUIN) {
@@ -166,7 +170,8 @@ Aura.prototype.periodicTick = function() {
                 }
             }
 
-            this.owner.results.dotDamage += damage; //Add damage to total of dot
+            this.owner.results.dotDamage += damage; // Add damage to total of dot
+
             break;
     }
 };
