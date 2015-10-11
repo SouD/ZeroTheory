@@ -227,7 +227,7 @@ Unit.prototype.calculateSpellDamage = function (victim, spellEntry, damage, resu
                 critFactor = 2.0;
 
                 // Apply ISB this way since no trigger system
-                victim.applyOrRefreshSpell(spellStore.lookupEntry(17800)); // Shadow Vulnerability 20%
+                victim.applyOrRefreshSpell(spellStore.lookupEntry(SHADOW_VULNERABILITY_ID)); // Shadow Vulnerability 20%
                 break;
         }
 

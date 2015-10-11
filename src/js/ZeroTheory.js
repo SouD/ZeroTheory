@@ -18,7 +18,7 @@ var ZeroTheory = function() {
         specc: SM_RUIN,
         useCurse: false,
         curseId: 17937,
-        useCorruption: true,
+        useCorruption: false,
         corruptionId: 11672,
         shadowBoltId: 11661,
         useImmolate: false,
@@ -41,8 +41,8 @@ ZeroTheory.activeSpecc = SM_RUIN;
  */
 ZeroTheory.prototype.prepareTalents = function() {
     ZeroTheory.activeSpecc = this.spellInfo.specc;
-    var sm = new Spell(spellStore.lookupEntry(18275)); // Shadow Mastery
-    var ds = new Spell(spellStore.lookupEntry(18791)); // Touch of Shadow
+    var sm = new Spell(spellStore.lookupEntry(SHADOW_MASTERY_R5_ID)); // Shadow Mastery
+    var ds = new Spell(spellStore.lookupEntry(TOUCH_OF_SHADOW_ID)); // Touch of Shadow
 
     switch (ZeroTheory.activeSpecc) {
         case SM_RUIN:
@@ -231,7 +231,7 @@ ZeroTheory.prototype.run = function() {
                 gcd = rotation[sb].spellInfo.startRecoveryTime;
                 ct = rotation[sb].castTimeInfo.base;
 
-                var shadowTrance = spellStore.lookupEntry(17941);
+                var shadowTrance = spellStore.lookupEntry(SHADOW_TRANCE_ID);
 
                 if (this.caster.hasSpell(shadowTrance)) {
                     ct = 0;

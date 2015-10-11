@@ -84,10 +84,10 @@ config.js = {
 
 gulp.task('scripts', function () {
   return gulp.src(config.js.files)
-    .pipe(sourcemaps.init())
+    // .pipe(sourcemaps.init())
       .pipe(concat(config.js.file))
-      .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
+      // .pipe(uglify())
+    // .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.public.js));
 });
 

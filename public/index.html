@@ -12,7 +12,161 @@
     <![endif]-->
   </head>
   <body>
-    <h1>ZeroTheory</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <h1 class="page-header">ZeroTheory</h1>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+          <form method="POST" action="/">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="intellect" class="control-label">Intellect</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="intellect" placeholder="Intellect">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="stamina" class="control-label">Stamina</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="stamina" placeholder="Stamina">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="spellHitPct" class="control-label">Spell +hit%</label>
+                  <input type="number" value="0" min="0" max="100" step="1" class="form-control stat" id="spellHitPct" placeholder="Spell +hit%">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="spellCritPct" class="control-label">Spell +crit%</label>
+                  <input type="number" value="0" min="0" max="100" step="1" class="form-control stat" id="spellCritPct" placeholder="Spell +crit%">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="spellPen" class="control-label">Spell pen</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="spellPen" placeholder="Spell pen">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="sp" class="control-label">Spell damage</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="sp" placeholder="Spell damage">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="sp" class="control-label">Shadow spell damage</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="ssp" placeholder="Shadow spell damage">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="sp" class="control-label">Fire spell damage</label>
+                  <input type="number" value="0" min="0" step="1" class="form-control stat" id="fsp" placeholder="Fire spell damage">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input class="spell" type="checkbox" data-key="useCurse" data-select="curse"> Cast a curse
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <select id="curse" class="form-control spell-rank" data-key="curseId" disabled>
+                    <option value="17937" selected>Curse of Shadows</option>
+                    <option value="11722">Curse of the Elements</option>
+                    <option value="603">Curse of Doom</option>
+                    <option value="11713">Curse of Agony</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input class="spell" type="checkbox" data-key="useCorruption" data-select="corruption"> Cast Corruption
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <select id="corruption" class="form-control spell-rank" data-key="corruptionId" disabled>
+                    <option value="11672" selected>Corruption Rank 6</option>
+                    <option value="25311">Corruption Rank 7</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input class="spell" type="checkbox" data-key="useSiphonLife" data-select="siphon-life"> Cast Siphon Life
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <select id="siphon-life" class="form-control spell-rank" data-key="siphonLifeId" disabled>
+                    <option value="18881" selected>Siphon Life Rank 4</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input class="spell" type="checkbox" data-key="useImmolate" data-select="immolate"> Cast Immolate
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <select id="immolate" class="form-control spell-rank" data-key="immolateId" disabled>
+                    <option value="11668" selected>Immolate Rank 7</option>
+                    <option value="25309">Immolate Rank 8</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="run-time" class="control-label">Run time</label>
+                  <input type="number" value="900000" min="0" step="1" class="form-control" id="run-time" placeholder="Run time">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <button role="submit" type="submit" class="btn btn-primary">Run</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <script src="js/libs.min.js"></script>
     <script src="js/scripts.min.js"></script>
   </body>

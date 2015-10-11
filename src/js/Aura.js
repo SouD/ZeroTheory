@@ -165,7 +165,7 @@ Aura.prototype.periodicTick = function() {
                     chance = 4.0;
 
                 if (chance > rand) { // 4% chance
-                    this.caster.applyOrRefreshSpell(spellStore.lookupEntry(17941)); // Apply Shadow Trance
+                    this.caster.applyOrRefreshSpell(spellStore.lookupEntry(SHADOW_TRANCE_ID)); // Apply Shadow Trance
                     this.owner.results.procs += 1;
                 }
             }

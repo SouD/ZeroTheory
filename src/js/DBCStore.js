@@ -10,135 +10,64 @@
  * Class representing a spell storage. Provides necessary
  * querying and loading methods.
  *
- * @constructor SpellStore
+ * @constructor DBCStore
  */
-var SpellStore = function () {
-    this._loadCount = 0;
-    this._spellEntryStore = {};
-    this._spellDurationStore = {};
-    this._spellCastingTimeStore = {};
+var DBCStore = function () {
     this.loaded = false;
-
-    SpellStore._load(this);
+    this.dbc = null;
+    this.fieldIndex = {};
+    this.idIndex = {};
 };
 
 /**
- * Loads the store with the dbc files needed.
- * Currently loads:
- *     Spell.json
- *     SpellCastTimes.json
- *     SpellDuration.json
- *
- * @param {SpellStore} store The store to load
+ * Loads the store with the dbc file needed.
  */
-SpellStore._load = function (store) {
-    $.getJSON('dbcs/Spell.json', function (data) {
-        // Create index map from data.fields
-        var i = 0;
-        data.fieldIndex = {};
-        for (var k in data.fields) {
-            data.fieldIndex[k] = i;
-            i++;
+DBCStore.prototype.load = function (dbc) {
+    if (!this.loaded) {
+        if (dbc) {
+            this.dbc = dbc;
+            this.loaded = true;
+
+            this.buildIndices();
         }
-        data.fields = null;
-
-        store._spellEntryStore = data;
-        SpellStore._fileLoadComplete(store);
-    });
-
-    $.getJSON('dbcs/SpellDuration.json', function (data) {
-        var i = 0;
-        data.fieldIndex = {};
-        for (var k in data.fields) {
-            data.fieldIndex[k] = i;
-            i++;
-        }
-        data.fields = null;
-
-        store._spellDurationStore = data;
-        SpellStore._fileLoadComplete(store);
-    });
-
-    $.getJSON('dbcs/SpellCastTimes.json', function (data) {
-        var i = 0;
-        data.fieldIndex = {};
-        for (var k in data.fields) {
-            data.fieldIndex[k] = i;
-            i++;
-        }
-        data.fields = null;
-
-        store._spellCastingTimeStore = data;
-        SpellStore._fileLoadComplete(store);
-    });
+    }
 };
 
 /**
- * Callback function used in conjunction with
- * SpellStore._load
- *
- * @param {SpellStore} store Store that was loaded with a dbc file
+ * Build DBC indices.
  */
-SpellStore._fileLoadComplete = function (store) {
-    store._loadCount += 1;
+DBCStore.prototype.buildIndices = function () {
+    if (this.loaded && this.dbc) {
+        var i = 0;
+        for (var key in this.dbc.fields) {
+            this.fieldIndex[key] = i;
+            ++i;
+        }
 
-    if (store._loadCount >= 3) {
-        store.loaded = true;
+        this.dbc.fields = null; // Remove fieldnames from dbc
+
+        var id = null;
+        for (i = 0; i < this.dbc.records.length; ++i) {
+            id = this.dbc.records[i][this.fieldIndex.ID];
+            this.idIndex[id] = i;
+        }
     }
 };
 
 /**
  * Looks up a spell entry based on input id.
  *
- * @param {number} id Spell id to search by
+ * @param {number} id Spell id to search by.
  */
-SpellStore.prototype.lookupEntry = function (id) {
+DBCStore.prototype.lookupEntry = function (id) {
     if (!this.loaded || !id) {
         return null;
     }
 
-    for (var i = 0; i < this._spellEntryStore.records.length; i++) {
-        if (this._spellEntryStore.records[i][this._spellEntryStore.fieldIndex.ID] == id) {
-            return this._remapRecord(this._spellEntryStore.records[i], this._spellEntryStore.fieldIndex);
-        }
-    }
+    var i = this.idIndex[id];
 
-    return null;
-};
-
-/**
- * Looks up a spell duration entry based on input id.
- *
- * @param {number} id Duration entry id to search by
- */
-SpellStore.prototype.lookupDuration = function (id) {
-    if (!this.loaded || !id) {
-        return null;
-    }
-
-    for (var i = 0; i < this._spellDurationStore.records.length; i++) {
-        if (this._spellDurationStore.records[i][this._spellDurationStore.fieldIndex.ID] == id) {
-            return this._remapRecord(this._spellDurationStore.records[i], this._spellDurationStore.fieldIndex);
-        }
-    }
-
-    return null;
-};
-
-/**
- * Looks up a spell casting time entry based on input id.
- *
- * @param {number} id Casting time entry id to search by
- */
-SpellStore.prototype.lookupCastingTime = function (id) {
-    if (!this.loaded || !id) {
-        return null;
-    }
-
-    for (var i = 0; i < this._spellCastingTimeStore.records.length; i++) {
-        if (this._spellCastingTimeStore.records[i][this._spellCastingTimeStore.fieldIndex.ID] == id) {
-            return this._remapRecord(this._spellCastingTimeStore.records[i], this._spellCastingTimeStore.fieldIndex);
-        }
+    if (i) {
+        return this._remapRecord(this.dbc.records[i], this.fieldIndex);
     }
 
     return null;
@@ -147,10 +76,10 @@ SpellStore.prototype.lookupCastingTime = function (id) {
 /**
  * Remaps the input record to the input set of keys.
  *
- * @param {object} record Record to remap
- * @param {object} keys New set of keys to use
+ * @param {object} record Record to remap.
+ * @param {object} keys New set of keys to use.
  */
-SpellStore.prototype._remapRecord = function (record, keys) {
+DBCStore.prototype._remapRecord = function (record, keys) {
     var res = {};
 
     for (var k in keys) {
@@ -159,26 +88,3 @@ SpellStore.prototype._remapRecord = function (record, keys) {
 
     return res;
 };
-
-/**
- * Gets the duration entry for the supplied spell entry
- * if it exists.
- *
- * @param {object} spellEntry Spell entry information
- */
-SpellStore.prototype.getDuration = function (spellEntry) {
-    return this.lookupDuration(spellEntry.durationIndex);
-};
-
-/**
- * Gets the casting time entry for the supplied spell entry
- * if it exists.
- *
- * @param {object} spellEntry Spell entry information
- */
-SpellStore.prototype.getCastingTime = function (spellEntry) {
-    return this.lookupCastingTime(spellEntry.castingTimeIndex);
-};
-
-//Create a global spellStore
-var spellStore = new SpellStore();

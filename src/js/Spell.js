@@ -65,8 +65,8 @@ Spell.calculateDefaultCoefficient = function (spellEntry, dmgType) {
     // Lazy implementation of coefficients, cba to do MangosZero b/c effectAmplitude1-3
     switch (spellEntry.spellIconID) {
         case 31: // Immolate
-            var dur = spellStore.getDuration(spellEntry).duration;
-            ct = spellStore.getCastingTime(spellEntry).base;
+            var dur = spellDurationStore.lookupEntry(spellEntry.durationIndex).duration;
+            ct = spellCastTimesStore.lookupEntry(spellEntry.castingTimeIndex).base;
             var dotPortion = (dur / 15000) / ((dur / 15000) + (ct / 3500));
             var directPortion = 1 - dotPortion;
 
@@ -91,7 +91,7 @@ Spell.calculateDefaultCoefficient = function (spellEntry, dmgType) {
             return 2.0; //Easy peasy
 
         case 152: // Siphon Life
-            coeff = spellStore.getDuration(spellEntry).duration / 15000.0;
+            coeff = spellDurationStore.lookupEntry(spellEntry.durationIndex).duration / 15000.0;
             dotFactor /= 10;
             coeff *= dotFactor;
 
@@ -100,7 +100,7 @@ Spell.calculateDefaultCoefficient = function (spellEntry, dmgType) {
             return coeff / 2; // Halve coeff for drain spells (Works out to 1 as it should)
 
         case 313: //Corruption
-            coeff = spellStore.getDuration(spellEntry).duration / 15000.0;
+            coeff = spellDurationStore.lookupEntry(spellEntry.durationIndex).duration / 15000.0;
             dotFactor /= 6;
 
             console.debug('Corr coeff: %d', (coeff * dotFactor));
@@ -113,7 +113,7 @@ Spell.calculateDefaultCoefficient = function (spellEntry, dmgType) {
             return 0.12;
 
         default:
-            ct = spellStore.getCastingTime(spellEntry).base;
+            ct = spellCastTimesStore.lookupEntry(spellEntry.castingTimeIndex).base;
 
             console.debug('Calculating default coeff with ctime: %i', ct);
 
@@ -141,8 +141,8 @@ Spell.prototype.reset = function () {
  */
 Spell.prototype.prepare = function (caster) {
     this.caster = caster;
-    this.castTimeInfo = spellStore.lookupCastingTime(this.spellInfo.castingTimeIndex);
-    this.durationInfo = spellStore.lookupDuration(this.spellInfo.durationIndex);
+    this.castTimeInfo = spellCastTimesStore.lookupEntry(this.spellInfo.castingTimeIndex);
+    this.durationInfo = spellDurationStore.lookupEntry(this.spellInfo.durationIndex);
     this.ready = true;
 };
 
@@ -191,7 +191,7 @@ Spell.prototype.doAllEffectOnTarget = function (victim) {
     console.debug('Processing effects for target: %o', victim);
 
     for (var i = 1; i <= MAX_EFFECT_INDEX; i++) {
-        if (this.spellInfo['effect' + i] == 0) {
+        if (this.spellInfo['effect' + i] === 0) {
             continue;
         }
 

@@ -15,6 +15,12 @@ var MAX_EFFECT_INDEX = 3,
     DS_RUIN_CORR = 2,
     DS_RUIN_SUPP = 3;
 
+// Spell IDs
+var SHADOW_TRANCE_ID = 17941,
+    SHADOW_VULNERABILITY_ID = 17800,
+    SHADOW_MASTERY_R5_ID = 18275,
+    TOUCH_OF_SHADOW_ID = 18791;
+
 // Possibly useless
 var SpellFamily = {
     SPELLFAMILY_GENERIC:      0,

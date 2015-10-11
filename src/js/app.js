@@ -2,13 +2,30 @@
  * @author SouD
  */
 
-var zt, store;
+var zt = null,
+    spellStore = null,
+    spellCastTimesStore = null,
+    spellDurationStore = null;
 
 jQuery(function ($) {
     zt = new ZeroTheory();
-    store = new SpellStore();
 
-    $('.stat').blur(function () {
+    spellStore = new DBCStore();
+    $.getJSON(DBC_PATH + 'Spell.json', function(dbc) {
+        spellStore.load(dbc);
+    });
+
+    spellCastTimesStore = new DBCStore();
+    $.getJSON(DBC_PATH + 'SpellCastTimes.json', function(dbc) {
+        spellCastTimesStore.load(dbc);
+    });
+
+    spellDurationStore = new DBCStore();
+    $.getJSON(DBC_PATH + 'SpellDuration.json', function(dbc) {
+        spellDurationStore.load(dbc);
+    });
+
+    $('.stat').change(function () {
         var value = $(this).val(),
             key = $(this).prop('id');
 
@@ -16,20 +33,13 @@ jQuery(function ($) {
             value = parseInt(value, 10);
 
             if (isNaN(value)) {
-                $(this).val('');
-
-                console.debug('Input number for %s was NaN', key);
+                $(this).val(0);
             } else {
                 zt.caster.stats[key] = Math.abs(value);
-
-                console.debug('Set zt.caster.stats.%s to %i', key, value);
             }
         } else {
             zt.caster.stats[key] = 0;
-
-            console.debug('Set zt.caster.stats.%s to %i', key, 0);
-
-            $(this).val('');
+            $(this).val(0);
         }
     });
 
@@ -40,42 +50,31 @@ jQuery(function ($) {
             value = parseInt(value, 10);
 
             if (isNaN(value)) {
-                $(this).val('');
-
-                console.debug('Input number for time was NaN');
+                $(this).val(DEFAULT_RUNTIME);
             } else {
                 zt.simVars.time = Math.abs(value);
-
-                console.debug('Set zt.simVars.time to %i', value);
             }
-        }
-        else {
+        } else {
             zt.simVars.time = DEFAULT_RUNTIME;
-
-            console.debug('Set zt.simVars.time to %i', DEFAULT_RUNTIME);
-
-            $(this).val('');
+            $(this).val(DEFAULT_RUNTIME);
         }
     });
 
     $('.spell').change(function () {
         var checked = $(this).is(':checked'),
-            spellName = $(this).data('spell-name');
+            key = $(this).data('key'),
+            select = $(this).data('select');
 
         // Toggle rank selection and set value
-        $('select[data-spell-name=' + spellName + ']').prop('disabled', checked);
+        $('#' + select).prop('disabled', !checked);
 
         zt.spellInfo[key] = checked; // Set value
-
-        console.debug('Set zt.spellInfo.%s to %s', key, checked);
     });
 
     $('.spell-rank').change(function () {
-        var key = $(this).attr('name'),
-            value = $(this).find('option:selected').val();
+        var key = $(this).data('key'),
+            value = parseInt($(this).find('option:selected').val(), 10);
 
-        zt.spellInfo[key] = parseInt(value, 10);
-
-        console.debug('Set zt.spellInfo.%s to %i', key, value);
+        zt.spellInfo[key] = value;
     });
 });
